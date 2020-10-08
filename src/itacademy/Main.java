@@ -50,7 +50,7 @@ public class Main {
 
 
 
-        int[] rocket1PropellersTargetPower = new int[]{5,20,60};
+        /**int[] rocket1PropellersTargetPower = new int[]{5,20,60};
         i = 0;
         int[] rocketPropellersCurrentPower = rocket1.getPropellersCurrentPower(propellers1);
         for (Propeller p : propellers1) {
@@ -58,7 +58,7 @@ public class Main {
                 p.setCurrentPower(rocket1PropellersTargetPower[i]);
             }
             catch (Exception e){
-                System.out.println(e);
+                System.out.println("Error: " + e);
                 System.exit(1);
             }
             i++;
@@ -70,23 +70,50 @@ public class Main {
             System.out.println(i+1 + ": " + rocketPropellersCurrentPower[i] + " -> " + p.getCurrentPower());
             i++;
         }
-
-
+        **/
+        int[] rocket1PropellersTargetPower = new int[]{5,20,60};
+        int[] rocket2PropellersTargetPower = new int[]{30,40,50,50,30,10};
+        java.lang.Runnable r1 = new RocketThreads(rocket1, propellers1, rocket1PropellersTargetPower);
+        java.lang.Runnable r2 = new RocketThreads(rocket2, propellers2, rocket2PropellersTargetPower);
+        new Thread(r1).start();
+        new Thread(r2).start();
     }
 }
 
-class PropellerThreads implements java.lang.Runnable {
+class RocketThreads implements java.lang.Runnable {
 
-    public PropellerThreads(Propeller propeller, int targetPower){
-        this.propeller = propeller;
-        this.targetPower = targetPower;
+    private Rocket rocket;
+    private List<Propeller> propellers;
+    private int i = 0;
+    private int[] propellersTargetPower;
+
+    public RocketThreads(Rocket rocket, List<Propeller> propellers, int[] propellersTargetPower){
+        this.rocket = rocket;
+        this.propellers = propellers;
+        this.propellersTargetPower = propellersTargetPower;
     }
 
     public void run(){
 
+        int[] rocketPropellersCurrentPower = rocket.getPropellersCurrentPower(propellers);
+        for (Propeller p : propellers) {
+            try {
+                p.setCurrentPower(propellersTargetPower[i]);
+            }
+            catch (Exception e){
+                System.out.println(e);
+                System.exit(1);
+            }
+            i++;
+        }
+
+        i = 0;
+        System.out.println("El cohete " + rocket.getCode() + " ha ajustado la potencia de los propulsores a los valores siguientes:");
+        for (Propeller p : propellers) {
+            System.out.println(i+1 + ": " + rocketPropellersCurrentPower[i] + " -> " + p.getCurrentPower());
+            i++;
+        }
 
     }
 
-    private Propeller propeller;
-    private int targetPower;
 }

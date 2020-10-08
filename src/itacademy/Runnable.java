@@ -1,4 +1,5 @@
 package itacademy;
 
-public class Runnable {
+public interface Runnable {
+    public abstract void run();
 }
