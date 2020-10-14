@@ -2,24 +2,24 @@ package itacademy;
 
 public class Propeller {
 
-    private int maxPower;
-    private int currentPower;
+    private double maxPower;
+    private double currentPower;
 
     public Propeller(){
         currentPower = 0;
     }
 
-    public void setMaxPower(int maxPower){
+    public void setMaxPower(double maxPower){
 
         this.maxPower = maxPower;
     }
 
-    public int getMaxPower(){
+    public double getMaxPower(){
 
         return maxPower;
     }
 
-    public void setCurrentPower(int currentPower) throws Exception {
+    public void setCurrentPower(double currentPower) throws Exception {
         if (currentPower <= maxPower && currentPower >= 0) {
             this.currentPower = currentPower;
         } else if (currentPower < 0){
@@ -30,7 +30,7 @@ public class Propeller {
         }
     }
 
-    public int getCurrentPower(){
+    public double getCurrentPower(){
 
         return currentPower;
     }

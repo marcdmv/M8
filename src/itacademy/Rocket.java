@@ -20,14 +20,14 @@ public class Rocket {
         return code;
     }
 
-    public void changePower (int[] propellersTargetPower) {
+    public void changePower (double[] propellersTargetPower) {
 
 
     }
 
-    public int[] getPropellersCurrentPower (List<Propeller> propellers) {
+    public double[] getPropellersCurrentPower (List<Propeller> propellers) {
         int i = 0;
-        int [] propellersCurrentPower = new int[propellers.size()];
+        double [] propellersCurrentPower = new double[propellers.size()];
         for (Propeller p : propellers) {
             propellersCurrentPower[i] = p.getCurrentPower();
         }
