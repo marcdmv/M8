@@ -47,32 +47,9 @@ public class Main {
             System.out.println(i+1 + ": " + p.getMaxPower());
             i++;
         }
-
-
-
-        /**int[] rocket1PropellersTargetPower = new int[]{5,20,60};
-        i = 0;
-        int[] rocketPropellersCurrentPower = rocket1.getPropellersCurrentPower(propellers1);
-        for (Propeller p : propellers1) {
-            try {
-                p.setCurrentPower(rocket1PropellersTargetPower[i]);
-            }
-            catch (Exception e){
-                System.out.println("Error: " + e);
-                System.exit(1);
-            }
-            i++;
-        }
-
-        i = 0;
-        System.out.println("El cohete " + rocket1.getCode() + " ha ajustado la potencia de los propulsores a los valores siguientes:");
-        for (Propeller p : propellers1) {
-            System.out.println(i+1 + ": " + rocketPropellersCurrentPower[i] + " -> " + p.getCurrentPower());
-            i++;
-        }
-        **/
-        int[] rocket1PropellersTargetPower = new int[]{5,20,60};
-        int[] rocket2PropellersTargetPower = new int[]{30,40,50,50,30,10};
+        
+        int[] rocket1PropellersTargetPower = new int[]{5,25,75};
+        int[] rocket2PropellersTargetPower = new int[]{25,35,45,45,20,5};
         java.lang.Runnable r1 = new RocketThreads(rocket1, propellers1, rocket1PropellersTargetPower);
         java.lang.Runnable r2 = new RocketThreads(rocket2, propellers2, rocket2PropellersTargetPower);
         new Thread(r1).start();
@@ -110,10 +87,39 @@ class RocketThreads implements java.lang.Runnable {
         i = 0;
         System.out.println("El cohete " + rocket.getCode() + " ha ajustado la potencia de los propulsores a los valores siguientes:");
         for (Propeller p : propellers) {
-            System.out.println(i+1 + ": " + rocketPropellersCurrentPower[i] + " -> " + p.getCurrentPower());
+            int propellerNumber = i+1;
+            System.out.println("Rocket " + rocket.getCode() + " - Propeller #" + propellerNumber + ": " + rocketPropellersCurrentPower[i] + " -> " + p.getCurrentPower());
             i++;
         }
 
-    }
+        double totalPower;
+        double newPower;
+        double v0 = 0;
+        double v1 = 200;
+        totalPower = rocket.changeSpeed(v0, v1);
+        System.out.println("La potencia total necesaria para el cambio de velocidad es de: " + totalPower + " unidades de energía");
+        i = 0;
+        for (Propeller p : propellers) {
+            if (totalPower <= 0) {
+                newPower = p.getCurrentPower();
+            }
+            else if (p.getMaxPower()-p.getCurrentPower() >= totalPower) {
+                newPower = p.getCurrentPower()+totalPower;
+            }
+            else {
+                newPower = p.getMaxPower();
+            }
+            int propellerNumber = i+1;
+            System.out.println("Rocket " + rocket.getCode() + " - Propeller #" + propellerNumber + ": " + p.getCurrentPower() + " -> " + newPower);
+            totalPower -= p.getMaxPower()-p.getCurrentPower();
+            i++;
+        }
+        if (totalPower > 0) {
+            System.out.println("ERROR: Faltan por asignar " + totalPower + " unidades de energía al cohete " + rocket.getCode() + " para pasar de la velocidad " + v0 + " a la velocidad " + v1);
+        }
+        else {
+            System.out.println("Potencia de los propulsores modificada correctamente");
+        }
 
+    }
 }
